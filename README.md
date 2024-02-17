@@ -7,12 +7,13 @@ Market For Jobs Items Or Other Items
 
 # Supported Framework
 - QBOX
-- QBCore (Soon)
+- QBCore
 - ESX (Soon)
 
 # Dependencies
 - ox_lib
 - ox_inventory
+- oxmysql
 
 ## Feature
 
