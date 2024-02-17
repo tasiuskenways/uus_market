@@ -53,7 +53,7 @@ lib.callback.register('uus_market:sellItem', function(source, newAmount, item, a
     end
 end)
 
-lib.callback.register('uus_market:buyItem', function(source, newAmount, item, amount, price)
+lib.callback.register('uus_market:buyItem', function(source, item, amount, price)
     local player
     if Config.Framework == 'qbx' then
         player = exports.qbx_core:GetPlayer(source)
@@ -61,8 +61,24 @@ lib.callback.register('uus_market:buyItem', function(source, newAmount, item, am
         local QBCore = exports['qb-core']:GetCoreObject()
         player = QBCore.Functions.GetPlayer(source)
     end
+
+    local response = MySQL.query.await('SELECT `amount` FROM `uus_market` WHERE `item` = ?', {
+        item
+    })
+
+    if not response then
+        return false
+    end
+
+    local serverAmount = response[1].amount
+
+    if amount > serverAmount then
+        return false
+    end
+
+
     local affectedRows = MySQL.update.await('UPDATE uus_market SET amount = ? WHERE item = ?', {
-        newAmount, item
+        serverAmount - amount, item
     })
 
     if not affectedRows or affectedRows == 0 then

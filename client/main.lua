@@ -129,14 +129,13 @@ local function buyItems(data)
             })
 
             if pb then
-                local newAmont = data.currentAmount - input[1]
                 lib.callback('uus_market:buyItem', false, function(cb)
                     if cb then
                         Notify('Success Buy ' .. exports.ox_inventory:Items(data.item).label, 'success')
                     else
                         Notify('Something Wrong Please Try Again', 'error')
                     end
-                end, newAmont, data.item, input[1], price)
+                end, data.item, input[1], price)
             end
         else
             Notify('Not enough money', 'error')
