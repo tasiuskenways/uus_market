@@ -4,7 +4,13 @@ lib.callback.register('uus_martket:getCurrentData', function(source)
 end)
 
 lib.callback.register('uus_market:buyItem', function(source, newAmount, item, amount, price)
-    local player = exports.qbx_core:GetPlayer(source)
+    local player
+    if Config.Framework == 'qbx' then
+        player = exports.qbx_core:GetPlayer(source)
+    elseif Config.Framework == 'qb' then
+        local QBCore = exports['qb-core']:GetCoreObject()
+        player = QBCore.Functions.GetPlayer(source)
+    end
     local affectedRows = MySQL.update.await('UPDATE uus_market SET amount = ? WHERE item = ?', {
         newAmount, item
     })
@@ -23,7 +29,13 @@ lib.callback.register('uus_market:buyItem', function(source, newAmount, item, am
 end)
 
 lib.callback.register('uus_market:sellItem', function(source, newAmount, item, amount, price)
-    local player = exports.qbx_core:GetPlayer(source)
+    local player
+    if Config.Framework == 'qbx' then
+        player = exports.qbx_core:GetPlayer(source)
+    elseif Config.Framework == 'qb' then
+        local QBCore = exports['qb-core']:GetCoreObject()
+        player = QBCore.Functions.GetPlayer(source)
+    end
     local affectedRows = MySQL.update.await('UPDATE uus_market SET amount = ? WHERE item = ?', {
         newAmount, item
     })
@@ -42,7 +54,13 @@ lib.callback.register('uus_market:sellItem', function(source, newAmount, item, a
 end)
 
 lib.callback.register('uus_market:buyItem', function(source, newAmount, item, amount, price)
-    local player = exports.qbx_core:GetPlayer(source)
+    local player
+    if Config.Framework == 'qbx' then
+        player = exports.qbx_core:GetPlayer(source)
+    elseif Config.Framework == 'qb' then
+        local QBCore = exports['qb-core']:GetCoreObject()
+        player = QBCore.Functions.GetPlayer(source)
+    end
     local affectedRows = MySQL.update.await('UPDATE uus_market SET amount = ? WHERE item = ?', {
         newAmount, item
     })

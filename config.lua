@@ -1,5 +1,7 @@
 Config = {}
 Config.Debug = false
+Config.Framework = 'qb' -- Supported : qbx, qb
+Config.Target = 'qb-target'
 Config.Locations = {
     { coords = vec4(-845.12, -1258.92, 5.15, 148.82), model = 'a_m_m_salton_01', zoneDimensions = vec3(3, 3, 3), blipIcon = 207, blipLabel = "Job Market" }
 }

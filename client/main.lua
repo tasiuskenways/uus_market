@@ -1,7 +1,14 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 local spawnedPed
-local qbx = exports.qbx_core
 local blips = {}
+
+local function Notify(text, type)
+    if Config.Framework == 'qb' then
+        local QBCore = exports['qb-core']:GetCoreObject()
+        QBCore.Functions.Notify(text, type, 7500)
+    elseif Config.Framework == 'qbx' then
+        exports.qbx_core:Notify(text, type)
+    end
+end
 
 local function sellItem(data)
     local hasItem = exports.ox_inventory:Search('count', data.item)
@@ -28,9 +35,9 @@ local function sellItem(data)
     if pb then
         lib.callback('uus_market:sellItem', false, function(cb)
             if cb then
-                qbx:Notify('Success Sell ' .. exports.ox_inventory:Items(data.item).label, 'success')
+                Notify('Success Sell ' .. exports.ox_inventory:Items(data.item).label, 'success')
             else
-                qbx:Notify('Something Wrong Please Try Again', 'error')
+                Notify('Something Wrong Please Try Again', 'error')
             end
         end, newAmount, data.item, hasItem, price)
     end
@@ -83,15 +90,24 @@ local function sellItemsMenu()
     lib.showContext('uus_market:sellItemMenu')
 end
 
+local function checkPlayerMoney()
+    if Config.Framework == 'qb' then
+        local QBCore = exports['qb-core']:GetCoreObject()
+        return QBCore.Functions.GetPlayerData().money['bank']
+    elseif Config.Framework == 'qbx' then
+        return QBX.PlayerData.money['bank']
+    end
+end
+
 local function buyItems(data)
-    local money = QBX.PlayerData.money['bank']
+    local money = checkPlayerMoney()
     local input = lib.inputDialog('Amount To Buy', {
-        { type = 'number', label = 'Amount', placeholder = '1' },
+        { type = 'number', label = 'Amount', placeholder = data.currentAmount, max = data.currentAmount, min = 1 },
     })
 
     local price = input[1] * data.price
     if input[1] > data.currentAmount then
-        qbx:Notify('Not Enough Stock', 'error')
+        Notify('Not Enough Stock', 'error')
     else
         if money > price then
             local pb = lib.progressBar({
@@ -116,14 +132,14 @@ local function buyItems(data)
                 local newAmont = data.currentAmount - input[1]
                 lib.callback('uus_market:buyItem', false, function(cb)
                     if cb then
-                        qbx:Notify('Success Buy ' .. exports.ox_inventory:Items(data.item).label, 'success')
+                        Notify('Success Buy ' .. exports.ox_inventory:Items(data.item).label, 'success')
                     else
-                        qbx:Notify('Something Wrong Please Try Again', 'error')
+                        Notify('Something Wrong Please Try Again', 'error')
                     end
                 end, newAmont, data.item, input[1], price)
             end
         else
-            qbx:Notify('Not enough money', 'error')
+            Notify('Not enough money', 'error')
         end
     end
 end
@@ -210,13 +226,27 @@ local function createSeller()
         FreezeEntityPosition(spawnedPed, true)
         SetEntityInvincible(spawnedPed, true)
         SetBlockingOfNonTemporaryEvents(spawnedPed, true)
-        exports.ox_target:addLocalEntity(spawnedPed, {
-            {
-                label = "Open Market",
-                icon = 'fa-solid fa-dollar-sign',
-                onSelect = openSellMenu,
-            }
-        })
+
+        if Config.Target == 'ox_target' then
+            exports.ox_target:addLocalEntity(spawnedPed, {
+                {
+                    label = "Open Market",
+                    icon = 'fa-solid fa-dollar-sign',
+                    onSelect = openSellMenu,
+                }
+            })
+        elseif Config.Target == 'qb-target' then
+            exports['qb-target']:AddTargetEntity(spawnedPed, {
+                options = {
+                    {
+                        icon = 'fa-solid fa-dollar-sign',
+                        label = 'Open Market',
+                        action = openSellMenu
+                    }
+                },
+                distance = 2.5,
+            })
+        end
 
         blips = AddBlipForCoord(current.coords.x, current.coords.y, current.coords.z)
         SetBlipSprite(blips, current.blipIcon)

@@ -1,6 +1,5 @@
 fx_version 'cerulean'
 game 'gta5'
-author 'Tasius Kenways'
 
 version '1.0.0'
 
@@ -21,7 +20,6 @@ server_scripts {
 
 dependencies {
     'ox_lib',
-    'qbx_core'
 }
 
 lua54 'yes'
