@@ -5,6 +5,14 @@ https://cdn.discordapp.com/attachments/1008936658521051177/1208319071792402482/2
 
 Market For Jobs Items Or Other Items
 
+# Supported Framework
+- QBOX
+- QBCore (Soon)
+- ESX (Soon)
+
+# Dependencies
+- ox_lib
+- ox_inventory
 
 ## Feature
 
