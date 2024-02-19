@@ -19,7 +19,8 @@ server_scripts {
 }
 
 files {
-    'data/*.lua'
+    'data/*.lua',
+    'modules/objectplacer.lua'
 }
 
 dependencies {

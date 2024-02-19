@@ -1,4 +1,4 @@
-local pec = exports.uus_source:objPlacer()
+local pec = require 'modules.objectplacer'
 
 RegisterNetEvent('uus_market:createMarket', function()
     local input = lib.inputDialog('UUS MARKET', {
