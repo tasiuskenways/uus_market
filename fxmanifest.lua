@@ -18,6 +18,10 @@ server_scripts {
     '@oxmysql/lib/MySQL.lua'
 }
 
+files {
+    'data/*.lua'
+}
+
 dependencies {
     'ox_lib',
 }

@@ -94,26 +94,3 @@ lib.callback.register('uus_market:buyItem', function(source, item, amount, price
         end
     end
 end)
-
-local function refreshConfigItems()
-    for k, v in pairs(Config.SellItems) do
-        local result = MySQL.Sync.fetchScalar('SELECT item FROM uus_market WHERE item = ?', { k })
-        if not result then
-            MySQL.insert.await('INSERT INTO `uus_market` (item, amount) VALUES (?, ?)', {
-                k, 0
-            })
-        end
-    end
-    for k, v in pairs(Config.BuyItems) do
-        local result = MySQL.Sync.fetchScalar('SELECT item FROM uus_market WHERE item = ?', { k })
-        if not result then
-            MySQL.insert.await('INSERT INTO `uus_market` (item, amount) VALUES (?, ?)', {
-                k, 0
-            })
-        end
-    end
-end
-
-AddEventHandler('onResourceStart', function(resource)
-    refreshConfigItems()
-end)

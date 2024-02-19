@@ -293,3 +293,23 @@ AddEventHandler('onResourceStop', function(resource)
     end
     blips = {}
 end)
+
+AddStateBagChangeHandler('uus_market_save_market', 'global', function(bagname, key, value)
+    if value then
+        Config.Locations = value
+        createSeller()
+    end
+end)
+
+AddStateBagChangeHandler('uus_market_save_sell_items', 'global', function(bagname, key, value)
+    if value then
+        Config.SellItems = value
+        print(json.encode(Config.SellItems, { indent = true }))
+    end
+end)
+
+AddStateBagChangeHandler('uus_market_save_buy_items', 'global', function(bagname, key, value)
+    if value then
+        Config.BuyItems = value
+    end
+end)
