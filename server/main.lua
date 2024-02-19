@@ -1,3 +1,4 @@
+lib.versionCheck('tasiuskenways/uus_market')
 lib.callback.register('uus_martket:getCurrentData', function(source)
     local response = MySQL.query.await('SELECT `item`, `amount` FROM `uus_market`')
     return response
